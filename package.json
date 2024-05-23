@@ -1,0 +1,21 @@
+{
+  "name": "hello-ts-effect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx tsx --watch index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@effect/platform": "^0.54.0",
+    "@effect/platform-node": "^0.50.0",
+    "effect": "^3.2.4"
+  }
+}
