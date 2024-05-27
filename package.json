@@ -11,11 +11,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.12",
     "typescript": "^5.4.5"
   },
   "dependencies": {
     "@effect/platform": "^0.54.0",
     "@effect/platform-node": "^0.50.0",
-    "effect": "^3.2.4"
+    "@faker-js/faker": "^8.4.1",
+    "effect": "^3.2.4",
+    "express": "^4.19.2"
   }
 }
