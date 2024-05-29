@@ -64,6 +64,7 @@ const createIndex = Effect.gen(function* () {
     Exit.isFailure(exit) ? deleteIndex(index) : Effect.void
   );
 });
+
 // Create an entry in the database, and define the release function that deletes the entry if the operation fails.
 const createEntry = (bucket: Bucket, index: Index) =>
   Effect.gen(function* () {
@@ -73,6 +74,7 @@ const createEntry = (bucket: Bucket, index: Index) =>
       (entry, exit) => (Exit.isFailure(exit) ? deleteEntry(entry) : Effect.void)
     );
   });
+
 export const make = Effect.scoped(
   Effect.gen(function* () {
     const bucket = yield* createBucket;
@@ -95,6 +97,7 @@ class FailureCase extends Context.Tag("FailureCase")<
   FailureCase,
   FailureCaseLiterals
 >() {}
+
 // Create a test layer for the S3 service
 const S3Test = Layer.effect(
   S3,

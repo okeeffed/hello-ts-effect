@@ -11,7 +11,7 @@ const connectToDb = () => {
   throw new Error("Something unexpected happened");
 };
 
-const divide = (a: number, b: number): Effect.Effect<number, Error, never> => {
+const divide = (a: number, b: number) => {
   connectToDb();
   return b === 0 ? Effect.fail(new DivideByZeroError()) : Effect.succeed(a / b);
 };
@@ -23,7 +23,7 @@ const program = Effect.gen(function* () {
 
 Effect.runPromise(
   program.pipe(
-    Effect.catchTag(DivideByZeroError, () => Effect.succeed("Cannot divide by zero")
-    // Effect.catchAll((e) => Effect.succeed(e.message))
+    // Effect.catchTag(DivideByZeroError , () => Effect.succeed("Cannot divide by zero")
+    Effect.catchAll((e) => Effect.succeed(e.message))
   )
 ).then(console.log, console.error);

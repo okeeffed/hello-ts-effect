@@ -4,7 +4,7 @@ interface ILogger {
   readonly log: (message: string) => Effect.Effect<void>;
 }
 
-class LoggerService extends Context.Tag("LoggerService")<
+export class LoggerService extends Context.Tag("LoggerService")<
   LoggerService,
   ILogger
 >() {}
@@ -15,22 +15,34 @@ class ConcreteLoggerService implements ILogger {
   }
 }
 
-interface IDatabase {
-  readonly get: () => Effect.Effect<void>;
+export class DatabaseConnectionFailed {
+  readonly _tag = "DatabaseConnectionFailed";
+  readonly name = "DatabaseConnectionFailed";
+  readonly message = "Failed to connect to the database";
 }
 
-class DatabaseService extends Context.Tag("DatabaseService")<
+interface IDatabase {
+  readonly get: (
+    manualFail?: boolean
+  ) => Effect.Effect<void, DatabaseConnectionFailed>;
+}
+
+export class DatabaseService extends Context.Tag("DatabaseService")<
   DatabaseService,
   IDatabase
 >() {}
 
 class ConcreteDatabaseService implements IDatabase {
-  get(): Effect.Effect<void> {
+  get(manualFail?: boolean): Effect.Effect<void, DatabaseConnectionFailed> {
+    if (manualFail) {
+      return Effect.fail(new DatabaseConnectionFailed());
+    }
+
     return Effect.sync(() => console.log("Getting data from the database"));
   }
 }
 
-const program = Effect.gen(function* () {
+export const program = Effect.gen(function* () {
   // Acquire instances of the 'Random' and 'Logger' services
   const logger = yield* LoggerService;
   const database = yield* DatabaseService;
@@ -38,7 +50,9 @@ const program = Effect.gen(function* () {
   yield* database.get();
 
   // Log the random number using the 'Logger' service
-  return yield* logger.log("Hello, world!");
+  yield* logger.log("Hello, world!");
+
+  return true;
 });
 
 const loggerService = Layer.succeed(LoggerService, new ConcreteLoggerService());
